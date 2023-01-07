@@ -10,11 +10,11 @@ const Bomba = {
   msgAlert: false, // pojavi se za določen čas, če kaj narobe klikneš ipd...
 
   get msg() {
-    if (this.playerNo === -1) return 'OBSERVER';
+    if (this.playerNo === -1) return 'GLEDALEC';
 
-    if (this.playersNo < 2) return 'WAITING FOR OTHER PLAYER...';
-    else if (this.winner !== null) return this.winner === this.playerNo ? 'YOU WON' : 'YOU LOST';
-    else return this.yourTurn ? 'YOUR TURN' : "OTHER PLAYER'S TURN";
+    if (this.playersNo < 2) return 'ČAKAM NA NASPROTNIKA...';
+    else if (this.winner !== null) return this.winner === this.playerNo ? 'ZMAGA' : 'PORAZ';
+    else return this.yourTurn ? 'TVOJA POTEZA' : "NASPROTNIKOVA POTEZA";
   },
 
   get msgShown() {
@@ -57,7 +57,6 @@ const Bomba = {
 
   onClick(index) {
     if (this.playerNo === -1) return console.warn('OBSERVER');
-    if (this.cells[index] !== -1) return console.warn('CELL FULL');
 
     this.cells[index] = this.playerNo;
     this.turn = 1 - this.turn;
