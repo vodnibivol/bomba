@@ -44,8 +44,10 @@ const Bomba = {
       this.playersNo = playersNo;
     });
 
-    // --- events
+    // --- other
+    document.title = this.roomName + ' | bomba';
     document.onclick = (e) => e.target.matches('#board, .cell') || this.showMsg();
+    document.onkeydown = (e) => e.key === 'c' && (this.turn = this.playerNo);
   },
 
   get winner() {
