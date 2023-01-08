@@ -30,11 +30,11 @@ body {
 
     user-select: none;
     pointer-events: none;
-    
+
     &.hidden {
       visibility: hidden;
     }
-    
+
     &[data-clickable] {
       pointer-events: all;
       cursor: pointer;
@@ -60,7 +60,7 @@ body {
     row-gap: $gap;
 
     @media screen and (max-width: 350px) {
-      $cell-size: 70px;
+      $cell-size: 70vw/3;
       grid-template-columns: repeat(3, $cell-size);
       grid-template-rows: repeat(3, $cell-size);
     }

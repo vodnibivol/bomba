@@ -50,11 +50,10 @@ const Bomba = {
 
   get winner() {
     const WINS = ['012', '345', '678', '036', '147', '258', '048', '246'];
-    let w = null;
-    [0, 1].forEach((playerNo) => {
-      if (WINS.some((combo) => [...combo].every((index) => this.cells[index] === playerNo))) w = playerNo;
-    });
-    return w;
+    for (let i = 0; i <= 1; ++i) {
+      if (WINS.some((combo) => [...combo].every((index) => this.cells[index] === i))) return i;
+    }
+    return null;
   },
 
   get draw() {
@@ -77,6 +76,6 @@ const Bomba = {
   },
 
   showMsg() {
-    this.msgAlert = true && setTimeout(() => (this.msgAlert = false), 2000);
+    (this.msgAlert = true) && setTimeout(() => (this.msgAlert = false), 2000);
   },
 };
