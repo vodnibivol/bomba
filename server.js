@@ -9,6 +9,11 @@ const io = new Server(server);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/:roomName', (req, res) => {
+  // res.end(req.params.roomName);
+  res.sendFile(path.join(__dirname, 'public', 'play.html'));
+});
+
 const ROOMS = {
   data: {},
   get(roomName) {
@@ -19,7 +24,7 @@ const ROOMS = {
     this.data[roomName] = room;
   },
   clean() {
-    // remove room if no players .. NOT USED because of resetting ipd.
+    // remove room if no players .. NOT USED because of server resetting...
     const keys = Object.keys(this.data);
     for (let i = keys.length - 1; !!i; --i) {
       const key = keys[i];
@@ -29,10 +34,10 @@ const ROOMS = {
 };
 
 class Room {
-  constructor(name, players) {
+  constructor(name, { players, turn } = {}) {
     this.name = name;
     this.players = players || [null, null];
-    this.turn = 0;
+    this.turn = turn || 0;
     this.cells = new Array(9).fill(-1);
     this.winner = null;
   }
@@ -75,8 +80,8 @@ io.on('connection', (socket) => {
     io.to(ROOM_NAME).emit('GAME_STATE', getState(ROOM_NAME));
   });
 
-  socket.on('RESET_GAME', (roomName) => {
-    ROOMS.set(ROOM_NAME, new Room(roomName, ROOMS.get(ROOM_NAME).players));
+  socket.on('RESET_GAME', ({ roomName, winner }) => {
+    ROOMS.set(ROOM_NAME, new Room(roomName, { turn: 1 - winner, players: ROOMS.get(ROOM_NAME).players }));
     io.to(ROOM_NAME).emit('GAME_STATE', getState(ROOM_NAME));
   });
 

@@ -2,7 +2,8 @@ const $ = (sel) => document.querySelector(sel);
 const socket = io();
 
 const Bomba = {
-  roomName: new URLSearchParams(location.search).get('room'),
+  // roomName: new URLSearchParams(location.search).get('room'),
+  roomName: window.location.pathname.match(/\/?(.*)\/?/)[1],
   cells: new Array(9).fill(-1),
   playerNo: -1, // 0 ali 1, določi server
   playersNo: 1,
@@ -14,11 +15,12 @@ const Bomba = {
 
     if (this.playersNo < 2) return 'ČAKAM NA NASPROTNIKA...';
     else if (this.winner !== null) return this.winner === this.playerNo ? 'ZMAGA' : 'PORAZ';
-    else return this.yourTurn ? 'TVOJA POTEZA' : "NASPROTNIKOVA POTEZA";
+    else if (this.draw) return 'NEODLOČENO...';
+    else return this.yourTurn ? 'TVOJA POTEZA' : 'NASPROTNIKOVA POTEZA';
   },
 
   get msgShown() {
-    return this.playerNo === -1 || this.playersNo < 2 || this.winner !== null || this.msgAlert;
+    return this.playerNo === -1 || this.playersNo < 2 || this.winner !== null || this.draw || this.msgAlert;
   },
 
   get yourTurn() {
@@ -31,6 +33,7 @@ const Bomba = {
   },
 
   init() {
+    console.log(this.roomName);
     socket.emit('ACCESS_ROOM', this.roomName);
     socket.on('GRANT_ROOM_ACCESS', ({ playerNo, roomName }) => {
       this.playerNo = playerNo;
@@ -42,7 +45,6 @@ const Bomba = {
     });
 
     // --- events
-    document.onkeydown = (e) => e.key === 'r' && socket.emit('RESET_GAME', this.roomName);
     document.onclick = (e) => e.target.matches('#board, .cell') || this.showMsg();
   },
 
@@ -55,17 +57,23 @@ const Bomba = {
     return w;
   },
 
-  onClick(index) {
-    if (this.playerNo === -1) return console.warn('OBSERVER');
+  get draw() {
+    return !this.winner && this.cells.every((c) => c !== -1);
+  },
 
+  cellClick(index) {
     this.cells[index] = this.playerNo;
-    this.turn = 1 - this.turn;
+    this.turn = 1 - this.turn; // 1 <=> 0
 
     socket.emit('GAME_STATE', {
       cells: this.cells,
       turn: this.turn,
       winner: this.winner,
     });
+  },
+
+  reset() {
+    socket.emit('RESET_GAME', { roomName: this.roomName, winner: this.winner });
   },
 
   showMsg() {

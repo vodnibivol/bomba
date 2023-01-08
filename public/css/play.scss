@@ -22,15 +22,22 @@ body {
   display: contents;
 
   #msg {
-    pointer-events: none;
     position: fixed;
     bottom: 1rem;
     right: 1.5rem;
     border: 2px solid black;
     padding: 2px 10px;
 
+    user-select: none;
+    pointer-events: none;
+    
     &.hidden {
       visibility: hidden;
+    }
+    
+    &[data-clickable] {
+      pointer-events: all;
+      cursor: pointer;
     }
   }
 
