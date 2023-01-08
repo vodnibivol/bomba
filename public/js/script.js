@@ -29,7 +29,7 @@ const Bomba = {
 
   get disabled() {
     if (this.playerNo === -1) return true;
-    return !(this.playersNo > 1 && this.winner === null && this.yourTurn);
+    return !(this.playersNo >= 2 && this.winner === null && !this.draw && this.yourTurn);
   },
 
   init() {
