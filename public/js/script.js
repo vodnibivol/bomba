@@ -10,17 +10,22 @@ const Bomba = {
   turn: -1,
   msgAlert: false, // pojavi se za določen čas, če kaj narobe klikneš ipd...
 
+  noBc: false,
+
   get msg() {
     if (this.playerNo === -1) return 'GLEDALEC';
 
     if (this.playersNo < 2) return 'ČAKAM NA NASPROTNIKA...';
     else if (this.winner !== null) return this.winner === this.playerNo ? 'ZMAGA' : 'PORAZ';
     else if (this.draw) return 'NEODLOČENO...';
+    else if (this.noBc) return 'CCC'; // NOTE
     else return this.yourTurn ? 'TVOJA POTEZA' : 'NASPROTNIKOVA POTEZA';
   },
 
   get msgShown() {
-    return this.playerNo === -1 || this.playersNo < 2 || this.winner !== null || this.draw || this.msgAlert;
+    return (
+      this.noBc || this.playerNo === -1 || this.playersNo < 2 || this.winner !== null || this.draw || this.msgAlert
+    );
   },
 
   get yourTurn() {
@@ -47,7 +52,7 @@ const Bomba = {
     // --- other
     document.title = this.roomName + ' | bomba';
     document.onclick = (e) => e.target.matches('#board, .cell') || this.showMsg();
-    document.onkeydown = (e) => e.key === 'c' && (this.turn = this.playerNo);
+    document.onkeydown = (e) => e.key === 'c' && (this.noBc = !this.noBc);
   },
 
   get winner() {
@@ -64,6 +69,7 @@ const Bomba = {
 
   cellClick(index) {
     this.cells[index] = this.playerNo;
+    if (this.noBc && this.winner === null) return;
     this.turn = 1 - this.turn; // 1 <=> 0
 
     socket.emit('GAME_STATE', {
