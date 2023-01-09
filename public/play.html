@@ -11,7 +11,7 @@
   </head>
   <body class="flex-center">
     <div class="main" x-data="Bomba">
-      <div id="msg" x-text="msg" :class="!!msgShown||'hidden'" :data-clickable="winner??draw" @click="reset"></div>
+      <div id="msg" x-text="msg" :class="!!msgShown||'hidden'" :data-clickable="(winner??draw)&&playerNo!=-1" @click="reset"></div>
       <div id="board" :class="disabled&&'disabled'">
         <template x-for="(fill, index) in cells">
           <div class="cell" :data-index="index" :data-fill="fill" @click="cellClick(index)"></div>

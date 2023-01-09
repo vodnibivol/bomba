@@ -39,10 +39,11 @@ const Bomba = {
 
   init() {
     console.log(this.roomName);
-
+    
     socket.emit('ACCESS_ROOM', this.roomName);
     socket.on('GRANT_ROOM_ACCESS', ({ playerNo, roomName }) => {
       this.playerNo = playerNo;
+      console.log(this.playerNo);
     });
     socket.on('GAME_STATE', ({ cells, turn, playersNo }) => {
       this.turn = turn;
