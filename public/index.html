@@ -5,22 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>bomba</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/form.css" />
   </head>
   <body class="flex-center">
     <div id="main">
-      <form id="form" action="#">
-        <input placeholder="ime sobe" type="text" name="room" id="roomInput" spellcheck="false" autocomplete="off" />
+      <form action="play">
+        <input id="roomInput" placeholder="ime sobe" type="text" name="r" spellcheck="false" autocomplete="off" />
         <input type="submit" value="ok" />
       </form>
     </div>
 
     <script>
       roomInput.select();
-      form.onsubmit = (e) => {
-        e.preventDefault();
-        !!roomInput.value && (location.pathname = roomInput.value);
-      };
     </script>
   </body>
 </html>

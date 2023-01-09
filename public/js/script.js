@@ -2,8 +2,8 @@ const $ = (sel) => document.querySelector(sel);
 const socket = io();
 
 const Bomba = {
-  // roomName: new URLSearchParams(location.search).get('room'),
-  roomName: window.location.pathname.match(/\/?(.*)\/?/)[1],
+  roomName: new URLSearchParams(location.search).get('r'),
+  // roomName: window.location.pathname.match(/\/?(.*)\/?/)[1],
   cells: new Array(9).fill(-1),
   playerNo: -1, // 0 ali 1, določi server
   playersNo: 1,
@@ -39,6 +39,7 @@ const Bomba = {
 
   init() {
     console.log(this.roomName);
+
     socket.emit('ACCESS_ROOM', this.roomName);
     socket.on('GRANT_ROOM_ACCESS', ({ playerNo, roomName }) => {
       this.playerNo = playerNo;
