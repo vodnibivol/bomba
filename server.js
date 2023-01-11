@@ -9,11 +9,12 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 app.use(compression());
-app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
-// app.get('/:roomName', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'public', 'play.html'));
-// });
+app.get('/play', (req, res, next) => {
+  req.query.r ? next() : res.redirect('/');
+});
+
+app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
 const ROOMS = {
   data: {},
