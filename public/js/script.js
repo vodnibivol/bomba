@@ -17,7 +17,7 @@ const Bomba = {
     if (this.playersNo < 2) return 'ČAKAM NA NASPROTNIKA...';
     else if (this.winner !== null) return this.winner === this.playerNo ? 'ZMAGA' : 'PORAZ';
     else if (this.draw) return 'NEODLOČENO...';
-    else if (this.noBc) return 'CCC'; // NOTE
+    else if (this.noBc) return 'NAČIN GOLJUFANJA HEHE'; // NOTE
     else return this.yourTurn ? 'TVOJA POTEZA' : 'NASPROTNIKOVA POTEZA';
   },
 
@@ -53,7 +53,7 @@ const Bomba = {
     // --- other
     document.title = this.roomName + ' | bomba';
     document.onclick = (e) => e.target.matches('#board, .cell') || this.showMsg();
-    document.onkeydown = (e) => e.key === 'c' && (this.noBc = !this.noBc);
+    document.onkeydown = (e) => e.key === 'g' && (this.noBc = !this.noBc);
   },
 
   get winner() {
